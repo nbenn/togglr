@@ -2,6 +2,7 @@
 % Please edit documentation in R/put_update_time_entries.R
 \name{toggl_update_entries}
 \alias{toggl_update_entries}
+\alias{toggl_update_entry_tags}
 \title{toggl_update_entries}
 \usage{
 toggl_update_entries(
@@ -12,6 +13,13 @@ toggl_update_entries(
   stop = NULL,
   duration = NULL,
   tags = NULL,
+  api_token = get_toggl_api_token()
+)
+
+toggl_update_entry_tags(
+  time_entry_ids,
+  tags,
+  tag_action = c("add", "remove"),
   api_token = get_toggl_api_token()
 )
 }
@@ -31,6 +39,9 @@ toggl_update_entries(
 \item{tags}{tags}
 
 \item{api_token}{the toggl api token}
+
+\item{tag_action}{Either provided tags are merged with or removed from
+existing tags}
 }
 \description{
 update time entries

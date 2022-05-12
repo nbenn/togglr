@@ -74,3 +74,38 @@ toggl_update_entries <- function(
        body=toJSON(list(time_entry = time_entry), auto_unbox = TRUE)
   )
 }
+
+#' @param tag_action Either provided tags are merged with or removed from
+#' existing tags
+#' @rdname toggl_update_entries
+#' @export
+toggl_update_entry_tags <- function(
+  time_entry_ids,
+  tags,
+  tag_action = c("add", "remove"),
+  api_token = get_toggl_api_token()) {
+
+  if (is.null(api_token)){
+    stop("you have to set your api token using set_toggl_api_token('XXXXXXXX')")
+  }
+
+  if (missing(time_entry_ids)) {
+    stop("you need to supply a time_entry_ids ('id' field in entry data)")
+  }
+
+  time_entry <- list(
+    tags = as.list(tags),
+    tag_action = match.arg(tag_action)
+  )
+
+  POST(
+    paste0(
+      "https://api.track.toggl.com/api/v8/time_entries/",
+      paste(time_entry_ids, collapse = ",")
+    ),
+    verbose(),
+    authenticate(api_token, "api_token"),
+    encode = "json",
+    body = toJSON(list(time_entry = time_entry), auto_unbox = TRUE)
+  )
+}
